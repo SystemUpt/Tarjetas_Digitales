@@ -153,22 +153,57 @@ def generar_codigo_barras(codigo_texto: str) -> str:
 
 async def renderizar_tarjeta_a_png(url_tarjeta: str, ruta_salida_png: str):
     async with async_playwright() as p:
-        browser = await p.chromium.launch()
+
+        # 🔍 Detectar ruta de Chromium en Render automáticamente
+        playwright_path = "/opt/render/.cache/ms-playwright"
+
+        chromium_dirs = [
+            d for d in os.listdir(playwright_path)
+            if d.startswith("chromium-")
+        ]
+
+        chromium_dirs.sort(reverse=True)
+
+        chromium_path = os.path.join(
+            playwright_path,
+            chromium_dirs[0],
+            "chrome-linux",
+            "chrome"
+        )
+
+        print("Usando Chromium en:", chromium_path)
+
+        browser = await p.chromium.launch(
+            headless=True,
+            executable_path=chromium_path,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu"
+            ]
+        )
+
         page = await browser.new_page(
             viewport={"width": 1400, "height": 900},
             device_scale_factor=2
         )
 
-        await page.goto(url_tarjeta, wait_until="networkidle")
+        await page.goto(url_tarjeta, wait_until="domcontentloaded", timeout=60000)
 
         tarjeta = page.locator(".tarjeta-cliente")
+
         await tarjeta.screenshot(path=ruta_salida_png)
 
         await browser.close()
 
 
 def crear_png_desde_tarjeta(url_tarjeta: str, ruta_salida_png: str):
-    asyncio.run(renderizar_tarjeta_a_png(url_tarjeta, ruta_salida_png))
+    try:
+        asyncio.run(renderizar_tarjeta_a_png(url_tarjeta, ruta_salida_png))
+    except Exception as e:
+        print("❌ ERROR AL GENERAR PNG:", str(e))
+        raise
 
 
 # ----------------------------
