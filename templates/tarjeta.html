@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta generada | Super Keno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="pagina-tarjeta {% if modo_imagen %}modo-imagen{% endif %}">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-mensajes no-print">
+            {% for message in messages %}
+                <div class="flash-ok">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% if not modo_imagen %}
+    <div class="acciones no-print">
+        <a href="{{ url_for('index') }}" class="btn-secundario">Nueva tarjeta</a>
+        <a href="{{ url_for('buscar') }}" class="btn-secundario">Buscar clientes</a>
+
+        <form method="POST" action="{{ url_for('generar_png') }}" style="display:inline;">
+            <input type="hidden" name="nombre" value="{{ nombre }}">
+            <input type="hidden" name="telefono" value="{{ telefono }}">
+            <input type="hidden" name="codigo_cliente" value="{{ codigo_cliente }}">
+            <input type="hidden" name="barcode_path" value="{{ barcode_path }}">
+            <button type="submit" class="btn-principal">Generar PNG para WhatsApp</button>
+        </form>
+
+        <button class="btn-principal" onclick="window.print()">Imprimir / Guardar PDF</button>
+    </div>
+    {% endif %}
+
+    <section class="tarjeta-cliente">
+        <div class="fondo-azul"></div>
+        <div class="fondo-naranja"></div>
+        <div class="fondo-blanco"></div>
+
+        <div class="tarjeta-header">
+            <p class="tarjeta-aviso">
+                Tarjeta para uso frecuente en caso de no ser usada se deshabilitará por falta
+                de uso (6 meses aproximado sin uso).
+            </p>
+            <h2>CLIENTE FRECUENTE</h2>
+        </div>
+
+        <div class="nombre-cliente">
+            <h1>{{ nombre }}</h1>
+        </div>
+
+        <div class="meta-tarjeta">
+            <p><strong>Teléfono:</strong> {{ telefono }}</p>
+            <p><strong>ID Cliente:</strong> {{ codigo_cliente }}</p>
+        </div>
+
+        <div class="tarjeta-contenido">
+            <div class="bloque-logo">
+                <div class="logo-box">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Super Keno">
+                </div>
+            </div>
+
+            <div class="bloque-barcode">
+                <div class="barcode-box">
+                    <img src="{{ url_for('static', filename=barcode_path.replace('static/', '')) }}" alt="Código de barras">
+                </div>
+            </div>
+        </div>
+
+        <div class="tarjeta-footer">
+            <p>¡PRECIOS BAJOS POR TRADICIÓN!</p>
+        </div>
+    </section>
+
+</body>
+</html>

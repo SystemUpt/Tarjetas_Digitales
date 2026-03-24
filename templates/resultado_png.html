@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNG generado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="pagina-formulario">
+
+    <div class="formulario-box resultado-box">
+        <h1>Tarjeta PNG generada</h1>
+        <p class="subtexto-resultado">Ya quedó lista para mandarse por WhatsApp.</p>
+
+        <div class="preview-png">
+            <img src="{{ url_for('static', filename=ruta_relativa) }}" alt="Tarjeta PNG">
+        </div>
+
+        <div class="acciones-resultado">
+            <a class="btn-principal" href="{{ url_for('descargar_png', archivo=archivo) }}">
+                Descargar PNG
+            </a>
+
+            <a class="btn-secundario" href="{{ whatsapp_url }}" target="_blank">
+                Abrir WhatsApp
+            </a>
+
+            <a class="btn-secundario" href="{{ url_for('buscar') }}">
+                Buscar clientes
+            </a>
+
+            <a class="btn-secundario" href="{{ url_for('index') }}">
+                Nueva tarjeta
+            </a>
+        </div>
+
+        <div class="nota-whatsapp">
+            <p><strong>Cómo mandarla:</strong> abre WhatsApp, entra al chat del cliente y adjunta el PNG descargado.</p>
+        </div>
+    </div>
+
+</body>
+</html>

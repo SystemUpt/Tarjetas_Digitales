@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar cliente | Super Keno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="pagina-formulario">
+
+    <div class="formulario-box">
+        <div class="titulo-formulario">
+            <h1>Editar cliente</h1>
+            <p>Modifica nombre o teléfono</p>
+        </div>
+
+        <div class="acciones-top">
+            <a href="{{ url_for('buscar') }}" class="btn-secundario">Volver al buscador</a>
+        </div>
+
+        {% if errores %}
+            <div class="alerta-error">
+                <ul>
+                    {% for error in errores %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="POST" class="formulario">
+            <div class="grupo-formulario">
+                <label for="nombre">Nombre completo</label>
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    value="{{ nombre }}"
+                    required
+                >
+            </div>
+
+            <div class="grupo-formulario">
+                <label for="telefono">Teléfono</label>
+                <input
+                    type="text"
+                    id="telefono"
+                    name="telefono"
+                    value="{{ telefono }}"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-principal">
+                Guardar cambios
+            </button>
+        </form>
+
+        <div class="nota-whatsapp" style="margin-top:18px;">
+            <p>
+                <strong>Nota:</strong> si cambias el teléfono, se generará un nuevo código de cliente
+                y un nuevo código de barras. Después podrás volver a generar el PNG.
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

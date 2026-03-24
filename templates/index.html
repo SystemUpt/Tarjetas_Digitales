@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de tarjetas | Super Keno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="pagina-formulario">
+
+    <div class="formulario-box">
+        <div class="titulo-formulario">
+            <h1>Generar tarjeta digital</h1>
+            <p>Cliente frecuente - Super Keno</p>
+        </div>
+
+        <div class="acciones-top">
+            <a href="{{ url_for('buscar') }}" class="btn-secundario">Buscar clientes</a>
+        </div>
+
+        {% if errores %}
+            <div class="alerta-error">
+                <ul>
+                    {% for error in errores %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="POST" class="formulario">
+            <div class="grupo-formulario">
+                <label for="nombre">Nombre completo</label>
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Ej. Ma Consuelo Zambrano Juarez"
+                    value="{{ nombre }}"
+                    required
+                >
+            </div>
+
+            <div class="grupo-formulario">
+                <label for="telefono">Teléfono</label>
+                <input
+                    type="text"
+                    id="telefono"
+                    name="telefono"
+                    placeholder="Ej. 3312345678"
+                    value="{{ telefono }}"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-principal">
+                Generar tarjeta
+            </button>
+        </form>
+    </div>
+
+</body>
+</html>

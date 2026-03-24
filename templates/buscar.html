@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar clientes | Super Keno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="pagina-formulario">
+
+    <div class="formulario-box buscar-box">
+        <div class="titulo-formulario">
+            <h1>Buscar clientes</h1>
+            <p>Busca por nombre, teléfono o ID de cliente</p>
+        </div>
+
+        <div class="acciones-top">
+            <a href="{{ url_for('index') }}" class="btn-secundario">Nueva tarjeta</a>
+        </div>
+
+        <form method="POST" class="formulario">
+            <div class="grupo-formulario">
+                <label for="termino">Nombre o teléfono</label>
+                <input
+                    type="text"
+                    id="termino"
+                    name="termino"
+                    value="{{ termino }}"
+                    placeholder="Ej. Consuelo o 3241342647"
+                    required
+                >
+            </div>
+            <button type="submit" class="btn-principal">Buscar</button>
+        </form>
+
+        {% if resultados %}
+            <div class="lista-clientes">
+                {% for cliente in resultados %}
+                    <div class="cliente-card">
+                        <div class="cliente-info">
+                            <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+                            <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+                            <p><strong>ID Cliente:</strong> {{ cliente.codigo_cliente }}</p>
+                        </div>
+
+                        <div class="cliente-acciones">
+                            <a href="{{ url_for('ver_cliente', cliente_id=cliente.id) }}" class="btn-secundario">Ver tarjeta</a>
+                            <a href="{{ url_for('editar_cliente', cliente_id=cliente.id) }}" class="btn-secundario">Editar</a>
+                            {% if cliente.png_path %}
+                                <a href="{{ url_for('static', filename=cliente.png_path) }}" target="_blank" class="btn-secundario">Ver PNG</a>
+                            {% endif %}
+
+                            <a href="https://wa.me/52{{ cliente.telefono }}" target="_blank" class="btn-principal">WhatsApp</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif termino %}
+            <div class="sin-resultados">
+                No se encontraron clientes con ese dato.
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
